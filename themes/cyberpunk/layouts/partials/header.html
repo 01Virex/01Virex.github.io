@@ -1,0 +1,15 @@
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="{{ .Site.BaseURL }}">
+      <span class="brand-bracket">[</span>{{ .Site.Title }}<span class="brand-caret">_</span><span class="brand-bracket">]</span>
+    </a>
+    <nav class="nav">
+      {{ range .Site.Menus.main }}
+        <a class="nav-link" href="{{ .URL }}">{{ .Name }}</a>
+      {{ end }}
+      <button type="button" id="search-toggle" class="search-toggle" aria-label="搜索">[ 搜索 ]</button>
+      <button type="button" id="console-toggle" class="search-toggle console-toggle" aria-label="控制台">[ 控制台 ]</button>
+    </nav>
+  </div>
+  <div class="header-stripe" aria-hidden="true"></div>
+</header>

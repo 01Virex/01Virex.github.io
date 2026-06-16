@@ -1,0 +1,12 @@
+<div id="search-overlay" class="search-overlay" hidden data-index="{{ "index.json" | relLangURL }}">
+  <div class="search-modal">
+    <div class="search-modal-head">
+      <span class="search-prompt">&gt;</span>
+      <input type="search" id="site-search-input" class="search-input" autocomplete="off"
+             placeholder="搜索全站文章 … (Esc 关闭)" aria-label="全站搜索">
+      <button type="button" id="search-close" class="search-close" aria-label="关闭">[ X ]</button>
+    </div>
+    <div id="site-search-results" class="search-modal-results"></div>
+    <div class="search-modal-tip">// 提示: 按 Ctrl/Cmd + K 随时唤起搜索</div>
+  </div>
+</div>

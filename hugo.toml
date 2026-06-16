@@ -1,0 +1,73 @@
+baseURL = "https://01virex.github.io/"
+locale = "zh-CN"
+title = "01Virex"
+theme = "cyberpunk"
+enableRobotsTXT = true
+
+# 首页输出:HTML 页面 + JSON 搜索索引 + RSS 订阅
+[outputs]
+  home = ["HTML", "JSON", "RSS"]
+
+[params]
+  subtitle = "Wake the fuck up, samurai. // Gaming & Tech"
+  description = "一个赛博朋克风格的 Hugo 站点"
+  footer = "© 2026 01Virex"
+  author = "01Virex"
+  # 社交分享默认图(放一张图到 static/img/og-cover.png 即可启用)
+  ogImage = "/img/og-cover.png"
+  # 可选:社交账号,用于 JSON-LD sameAs(填了才输出)
+  # twitter = "@yourhandle"
+
+  # 背景数据雨(Matrix 字符雨)—— 可自定义
+  [params.dataRain]
+    enable   = true          # 开关:false 关闭
+    color    = "#00F0FF"     # 字符颜色(默认青蓝)
+    chars    = "01ｱｲｳｴｵｶｷｸｹｺ日月火水木金土"  # 飘落的字符集
+    fontSize = 16            # 字号(px)
+    speed    = 55            # 下落速度(ms,越小越快)
+    opacity  = 0.18          # 整体透明度(0~1,越小越淡)
+
+[menu]
+  [[menu.main]]
+    name = "首页"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    name = "文章"
+    url = "/posts/"
+    weight = 2
+  [[menu.main]]
+    name = "关于"
+    url = "/about/"
+    weight = 3
+  [[menu.main]]
+    name = "归档"
+    url = "/archives/"
+    weight = 4
+  [[menu.main]]
+    name = "友链"
+    url = "/friends/"
+    weight = 5
+  [[menu.main]]
+    name = "标签"
+    url = "/tags/"
+    weight = 6
+
+[markup]
+  [markup.highlight]
+    style = "dracula"
+    noClasses = true
+  [markup.goldmark.renderer]
+    unsafe = true
+
+# 相关文章:按相同标签/关键词推荐
+[related]
+  includeNewer = true
+  threshold = 50
+  toLower = true
+  [[related.indices]]
+    name = "tags"
+    weight = 100
+  [[related.indices]]
+    name = "title"
+    weight = 20

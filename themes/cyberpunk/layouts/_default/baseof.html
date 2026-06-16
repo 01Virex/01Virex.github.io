@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="{{ .Site.Language.Lang | default "zh-CN" }}" data-theme="cyberpunk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Hugo {{ hugo.Version }}">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} // {{ .Site.Title }}{{ end }}</title>
+
+  {{ partial "seo.html" . }}
+
+  {{ $css := resources.Get "css/main.css" | resources.Minify | resources.Fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+  {{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" href="{{ .Permalink }}">{{ end }}
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  {{ $dr := .Site.Params.dataRain }}
+  {{ if and $dr $dr.enable }}
+    <canvas id="data-rain" aria-hidden="true"
+            style="opacity: {{ $dr.opacity | default 0.18 }}"
+            data-color="{{ $dr.color | default "#00F0FF" }}"
+            data-chars="{{ $dr.chars | default "01" }}"
+            data-fontsize="{{ $dr.fontSize | default 16 }}"
+            data-speed="{{ $dr.speed | default 55 }}"></canvas>
+  {{ end }}
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="crt-flicker" aria-hidden="true"></div>
+  {{ if .IsPage }}<div id="reading-progress" aria-hidden="true"></div>{{ end }}
+
+  {{ partial "header.html" . }}
+
+  <main class="container">
+    {{ block "main" . }}{{ end }}
+  </main>
+
+  {{ partial "footer.html" . }}
+  {{ partial "search.html" . }}
+  {{ partial "console.html" . }}
+
+  {{ $app := resources.Get "js/app.js" | resources.Minify | resources.Fingerprint }}
+  <script src="{{ $app.RelPermalink }}" integrity="{{ $app.Data.Integrity }}" defer></script>
+  {{ $console := resources.Get "js/console.js" | resources.Minify | resources.Fingerprint }}
+  <script src="{{ $console.RelPermalink }}" integrity="{{ $console.Data.Integrity }}" defer></script>
+  {{ if and $dr $dr.enable }}
+    {{ $rain := resources.Get "js/datarain.js" | resources.Minify | resources.Fingerprint }}
+    <script src="{{ $rain.RelPermalink }}" integrity="{{ $rain.Data.Integrity }}" defer></script>
+  {{ end }}
+</body>
+</html>

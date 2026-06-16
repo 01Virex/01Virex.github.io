@@ -1,0 +1,18 @@
+<div id="console-overlay" class="console-overlay" hidden
+     data-index="{{ "index.json" | relLangURL }}"
+     data-title="{{ .Site.Title }}"
+     data-baseurl="{{ .Site.BaseURL }}">
+  <div class="console-window">
+    <div class="console-titlebar">
+      <span class="console-dot red"></span><span class="console-dot yellow"></span><span class="console-dot green"></span>
+      <span class="console-titletext">root@01virex: ~ — /bin/sh</span>
+      <button type="button" id="console-close" class="console-close" aria-label="关闭">[ X ]</button>
+    </div>
+    <div id="console-output" class="console-output" tabindex="0"></div>
+    <div class="console-inputline">
+      <span class="console-ps1">root@01virex:~#</span>
+      <input type="text" id="console-input" class="console-input" autocomplete="off"
+             autocapitalize="off" autocorrect="off" spellcheck="false" aria-label="终端输入">
+    </div>
+  </div>
+</div>

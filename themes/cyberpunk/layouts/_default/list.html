@@ -1,0 +1,18 @@
+{{ define "main" }}
+<section class="list-page">
+  <h1 class="section-title">// {{ .Title | upper }}</h1>
+  {{ with .Content }}<div class="content prose">{{ . }}</div>{{ end }}
+  <div class="post-list">
+    {{ range .Pages }}
+      <article class="post-card">
+        <a href="{{ .RelPermalink }}" class="post-card-link">
+          <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+          <h3 class="post-card-title">{{ .Title }}</h3>
+          <p class="post-card-summary">{{ .Summary | plainify | truncate 160 }}</p>
+          <span class="read-more">ACCESS &gt;&gt;</span>
+        </a>
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

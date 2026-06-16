@@ -1,0 +1,19 @@
+{{ define "main" }}
+<article class="about-page">
+  <h1 class="glitch" data-text="{{ .Title }}">{{ .Title }}</h1>
+
+  <div class="id-card">
+    <div class="id-card-stripe" aria-hidden="true"></div>
+    <div class="id-card-body">
+      <div class="id-row"><span class="id-key">代号 // ALIAS</span><span class="id-val">{{ .Site.Title }}</span></div>
+      <div class="id-row"><span class="id-key">所在 // LOC</span><span class="id-val">{{ .Params.location | default "NIGHT CITY, 2077" }}</span></div>
+      <div class="id-row"><span class="id-key">职业 // CLASS</span><span class="id-val">{{ .Params.role | default "NETRUNNER" }}</span></div>
+      <div class="id-row"><span class="id-key">状态 // STATUS</span><span class="id-val online">● ONLINE</span></div>
+    </div>
+  </div>
+
+  <div class="content prose">
+    {{ .Content }}
+  </div>
+</article>
+{{ end }}

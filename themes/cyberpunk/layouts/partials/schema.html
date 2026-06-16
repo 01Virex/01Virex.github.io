@@ -1,0 +1,34 @@
+{{- /* JSON-LD 结构化数据 */ -}}
+{{- if .IsPage -}}
+{{- $img := "" -}}
+{{- with .Params.cover }}{{ $img = . | absURL }}{{ else }}{{ with site.Params.ogImage }}{{ $img = . | absURL }}{{ end }}{{ end -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ .Title | jsonify }},
+  "description": {{ (cond (ne (string .Description) "") .Description (.Summary | plainify | truncate 160)) | jsonify }},
+  "datePublished": {{ .Date.Format "2006-01-02T15:04:05Z07:00" | jsonify }},
+  "dateModified": {{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" | jsonify }},
+  "author": { "@type": "Person", "name": {{ .Site.Params.author | default .Site.Title | jsonify }} },
+  "publisher": { "@type": "Organization", "name": {{ .Site.Title | jsonify }} },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": {{ .Permalink | jsonify }} }{{ with $img }},
+  "image": {{ . | jsonify }}{{ end }}
+}
+</script>
+{{- else -}}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": {{ .Site.Title | jsonify }},
+  "url": {{ .Site.BaseURL | jsonify }},
+  "description": {{ .Site.Params.description | jsonify }},
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": {{ (printf "%s?q={search_term_string}" .Site.BaseURL) | jsonify }},
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{{- end -}}

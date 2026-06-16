@@ -1,0 +1,46 @@
+{{ define "main" }}
+<section class="hero">
+  <h1 class="glitch" data-text="{{ .Site.Title }}">{{ .Site.Title }}</h1>
+  {{ with .Site.Params.subtitle }}<p class="hero-sub" data-typewriter="{{ . }}">{{ . }}</p>{{ end }}
+  {{ with .Content }}<div class="hero-content">{{ . }}</div>{{ end }}
+
+  <div class="boot-panel" aria-hidden="true">
+    <div class="boot-line"><span class="ok">[ OK ]</span> 接入中 …</div>
+    <div class="boot-line"><span class="ok">[ OK ]</span> 加载成功！<span class="blink">_</span></div>
+  </div>
+
+  <div class="stat-grid">
+    <div class="stat-cell">
+      <span class="stat-num">{{ len (where .Site.RegularPages "Type" "posts") }}</span>
+      <span class="stat-label">// 文章</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num">{{ len .Site.Taxonomies.tags }}</span>
+      <span class="stat-label">// 标签</span>
+    </div>
+    <div class="stat-cell">
+      <span class="stat-num">{{ now.Format "2006" }}</span>
+      <span class="stat-label">// 年份</span>
+    </div>
+  </div>
+</section>
+
+<section class="post-list">
+  <h2 class="section-title">// LATEST_TRANSMISSIONS</h2>
+  {{ $pages := where .Site.RegularPages "Type" "posts" }}
+  {{ if not $pages }}{{ $pages = .Site.RegularPages }}{{ end }}
+  {{ range first 6 $pages }}
+    <article class="post-card">
+      <a href="{{ .RelPermalink }}" class="post-card-link">
+        <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+        <h3 class="post-card-title">{{ .Title }}</h3>
+        <p class="post-card-summary">{{ .Summary | plainify | truncate 160 }}</p>
+        <span class="read-more">ACCESS &gt;&gt;</span>
+      </a>
+    </article>
+  {{ end }}
+  {{ if gt (len $pages) 6 }}
+    <a class="see-all" href="/posts/">VIEW_ALL_TRANSMISSIONS &gt;&gt;</a>
+  {{ end }}
+</section>
+{{ end }}

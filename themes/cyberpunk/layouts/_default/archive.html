@@ -1,0 +1,111 @@
+{{ define "main" }}
+<section class="archive-page">
+  <h1 class="glitch" data-text="{{ .Title }}">{{ .Title }}</h1>
+  {{ with .Content }}<div class="content prose">{{ . }}</div>{{ end }}
+
+  {{ $posts := where .Site.RegularPages "Type" "posts" }}
+
+  <div class="search-box">
+    <span class="search-prompt">&gt;</span>
+    <input type="search" id="archive-search" class="search-input" autocomplete="off"
+           placeholder="搜索标题 / 标签 / 摘要 …" aria-label="搜索文章">
+    <span class="search-caret blink">_</span>
+  </div>
+
+  <div class="archive-count">// 共 <span id="archive-total">{{ len $posts }}</span> 条记录</div>
+
+  <!-- 搜索结果(默认隐藏,有输入时显示) -->
+  <div id="search-results" class="search-results" hidden></div>
+
+  <!-- 默认按年份分组的视图 -->
+  <div id="archive-default">
+  {{ range $posts.GroupByDate "2006" }}
+    <div class="archive-year">
+      <h2 class="archive-year-title">{{ .Key }}</h2>
+      <ul class="archive-list">
+        {{ range .Pages }}
+          <li class="archive-item">
+            <span class="archive-date">{{ .Date.Format "01.02" }}</span>
+            <a class="archive-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+          </li>
+        {{ end }}
+      </ul>
+    </div>
+  {{ end }}
+  </div>
+</section>
+
+<script>
+(function () {
+  var input = document.getElementById('archive-search');
+  var results = document.getElementById('search-results');
+  var defaultView = document.getElementById('archive-default');
+  var data = [];
+
+  fetch('{{ "index.json" | relLangURL }}')
+    .then(function (r) { return r.json(); })
+    .then(function (json) { data = json; })
+    .catch(function () { /* 索引加载失败时静默,搜索框不可用 */ });
+
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+
+  // 把命中的关键词用 <mark> 高亮(先转义再一次性替换,避免二次匹配标签)
+  function highlight(text, terms) {
+    var safe = esc(text);
+    var valid = terms.filter(Boolean).map(function (t) {
+      return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    });
+    if (!valid.length) return safe;
+    var re = new RegExp('(' + valid.join('|') + ')', 'gi');
+    return safe.replace(re, '<mark class="hl">$1</mark>');
+  }
+
+  function render(matches, q, terms) {
+    if (!matches.length) {
+      results.innerHTML = '<div class="search-empty">// 无匹配结果: ' + esc(q) + '</div>';
+      return;
+    }
+    var html = '<div class="search-meta">// 命中 ' + matches.length + ' 条</div><ul class="archive-list">';
+    matches.forEach(function (p) {
+      var tags = (p.tags || []).map(function (t) { return '#' + highlight(t, terms); }).join(' ');
+      // 摘要命中关键词时,显示该摘要并高亮(无摘要则不显示)
+      var hitSummary = p.summary && terms.some(function (t) {
+        return p.summary.toLowerCase().indexOf(t) !== -1;
+      });
+      var summary = hitSummary
+        ? '<span class="search-summary">' + highlight(p.summary, terms) + '</span>'
+        : '';
+      html += '<li class="archive-item search-item">' +
+                '<span class="archive-date">' + esc(p.date) + '</span>' +
+                '<a class="archive-link" href="' + p.url + '">' + highlight(p.title, terms) + '</a>' +
+                (tags ? '<span class="search-tags">' + tags + '</span>' : '') +
+                summary +
+              '</li>';
+    });
+    html += '</ul>';
+    results.innerHTML = html;
+  }
+
+  input.addEventListener('input', function () {
+    var q = input.value.trim().toLowerCase();
+    if (!q) {
+      results.hidden = true;
+      defaultView.hidden = false;
+      return;
+    }
+    defaultView.hidden = true;
+    results.hidden = false;
+    var terms = q.split(/\s+/);
+    var matches = data.filter(function (p) {
+      var hay = (p.title + ' ' + (p.tags || []).join(' ') + ' ' + p.summary).toLowerCase();
+      return terms.every(function (term) { return hay.indexOf(term) !== -1; });
+    });
+    render(matches, q, terms);
+  });
+})();
+</script>
+{{ end }}

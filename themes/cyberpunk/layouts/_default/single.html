@@ -1,0 +1,47 @@
+{{ define "main" }}
+<div class="single-wrap{{ if gt (len .TableOfContents) 80 }} has-toc{{ end }}">
+<article class="single">
+  <header class="single-header">
+    <h1 class="glitch" data-text="{{ .Title }}">{{ .Title }}</h1>
+    <div class="single-meta">
+      <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+      {{ with .ReadingTime }}<span class="sep">//</span><span>{{ . }} MIN READ</span>{{ end }}
+      {{ with .Params.tags }}<span class="sep">//</span>
+        {{ range . }}<a class="tag" href="{{ "/tags/" | relLangURL }}{{ . | urlize }}">#{{ . }}</a>{{ end }}
+      {{ end }}
+    </div>
+  </header>
+  <div class="content prose">
+    {{ .Content }}
+  </div>
+  <nav class="single-nav">
+    {{ with .PrevInSection }}<a class="nav-prev" href="{{ .RelPermalink }}">&lt;&lt; {{ .Title }}</a>{{ end }}
+    {{ with .NextInSection }}<a class="nav-next" href="{{ .RelPermalink }}">{{ .Title }} &gt;&gt;</a>{{ end }}
+  </nav>
+
+  {{ $related := .Site.RegularPages.Related . | first 4 }}
+  {{ with $related }}
+  <section class="related">
+    <h2 class="section-title">// RELATED_FILES</h2>
+    <div class="related-grid">
+      {{ range . }}
+        <a class="related-card" href="{{ .RelPermalink }}">
+          <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+          <span class="related-title">{{ .Title }}</span>
+        </a>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+</article>
+
+  {{ if gt (len .TableOfContents) 80 }}
+  <aside class="toc-wrap">
+    <div id="toc" class="toc">
+      <div class="toc-title">// 目录</div>
+      {{ .TableOfContents }}
+    </div>
+  </aside>
+  {{ end }}
+</div>
+{{ end }}
