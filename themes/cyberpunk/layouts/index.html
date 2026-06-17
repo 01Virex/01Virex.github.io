@@ -44,4 +44,23 @@
     <a class="see-all" href="/posts/">VIEW_ALL_TRANSMISSIONS &gt;&gt;</a>
   {{ end }}
 </section>
+
+{{ with .Site.GetPage "/moments" }}
+  {{ $ms := sort .Params.moments "date" "desc" }}
+  {{ with $ms }}
+  <section class="home-moments">
+    <h2 class="section-title">// RECENT_SIGNALS</h2>
+    <div class="home-moments-list">
+      {{ range first 3 . }}
+        <div class="home-moment">
+          {{ $t := time.AsTime .date }}
+          <time class="home-moment-time">{{ $t.Format "2006.01.02" }}</time>
+          <p class="home-moment-text">{{ .text | $.RenderString | plainify | truncate 90 }}{{ with .mood }} {{ . }}{{ end }}</p>
+        </div>
+      {{ end }}
+    </div>
+    <a class="see-all" href="/moments/">VIEW_ALL_SIGNALS &gt;&gt;</a>
+  </section>
+  {{ end }}
+{{ end }}
 {{ end }}

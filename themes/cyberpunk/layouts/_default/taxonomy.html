@@ -1,0 +1,38 @@
+{{ define "main" }}
+{{ if eq .Kind "term" }}
+<section class="list-page term-page">
+  <div class="term-head">
+    <span class="term-kind">// {{ .Data.Singular | upper }}</span>
+    <h1 class="section-title">{{ .Title }}</h1>
+    <span class="term-total">{{ len .Pages }} 篇</span>
+  </div>
+  {{ with .Content }}<div class="content prose">{{ . }}</div>{{ end }}
+  <div class="post-list">
+    {{ range .Pages }}
+      <article class="post-card{{ if .Params.cover }} has-cover{{ end }}">
+        <a href="{{ .RelPermalink }}" class="post-card-link">
+          {{ with .Params.cover }}<span class="post-card-thumb"><img src="{{ . | relURL }}" alt="{{ $.Title }}" loading="lazy" decoding="async"></span>{{ end }}
+          <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
+          <h3 class="post-card-title">{{ .Title }}</h3>
+          <p class="post-card-summary">{{ .Summary | plainify | truncate 160 }}</p>
+          <span class="read-more">ACCESS &gt;&gt;</span>
+        </a>
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ else }}
+<section class="list-page taxonomy-page">
+  <h1 class="section-title">// {{ .Title | upper }}</h1>
+  {{ with .Content }}<div class="content prose">{{ . }}</div>{{ end }}
+  <div class="term-cloud">
+    {{ range .Pages.ByTitle }}
+      <a class="term-chip" href="{{ .RelPermalink }}">
+        <span class="term-name">{{ .Title }}</span>
+        <span class="term-count">{{ len .Pages }}</span>
+      </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+{{ end }}

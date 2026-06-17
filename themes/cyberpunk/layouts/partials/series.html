@@ -1,0 +1,28 @@
+{{- /* 系列/专栏导航:若文章属于某系列,列出该系列全部文章 */ -}}
+{{- with .Params.series -}}
+  {{- range . -}}
+    {{- $name := . -}}
+    {{- with $.Site.GetPage (printf "/series/%s" $name) -}}
+      {{- $posts := .Pages.ByDate -}}
+      <aside class="series-box">
+        <div class="series-head">
+          <span class="series-label">// 系列专栏</span>
+          <a class="series-name" href="{{ .RelPermalink }}">{{ $name }}</a>
+          <span class="series-count">共 {{ len $posts }} 篇</span>
+        </div>
+        <ol class="series-list">
+          {{- range $i, $p := $posts -}}
+            <li class="series-item{{ if eq $p.RelPermalink $.RelPermalink }} is-current{{ end }}">
+              <span class="series-idx">{{ printf "%02d" (add $i 1) }}</span>
+              {{ if eq $p.RelPermalink $.RelPermalink }}
+                <span class="series-cur">{{ $p.Title }} <span class="series-you">← 你在这</span></span>
+              {{ else }}
+                <a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+              {{ end }}
+            </li>
+          {{- end -}}
+        </ol>
+      </aside>
+    {{- end -}}
+  {{- end -}}
+{{- end -}}

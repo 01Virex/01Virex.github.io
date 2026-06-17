@@ -78,7 +78,9 @@
         '  <span class="c-cmd">theme</span> rain on|off  开关背景数据雨',
         '  <span class="c-cmd">theme</span> color &lt;#色&gt;  改数据雨颜色',
         '  <span class="c-cmd">reboot</span>            重启终端(清屏+重显启动文案)',
-        '  <span class="c-cmd">clear</span>             清屏'
+        '  <span class="c-cmd">game</span>              玩个小游戏 🎮',
+        '  <span class="c-cmd">clear</span>             清屏',
+        '  <span class="c-muted">// 据说还藏着一些没列出来的命令…</span>'
       ].join('\n'));
     },
     ls: function () {
@@ -192,6 +194,59 @@
     print('What?');
     print('看起来你找到我的小号了(', 'c-egg');
   };
+  COMMANDS.sudo = function (args) {
+    if ((args || []).join(' ').toLowerCase().indexOf('rm') !== -1) {
+      print('好家伙,想 rm 我?权限不足,而且我把 sudo 藏起来了。', 'c-egg');
+    } else {
+      print('用户 ' + esc(siteTitle) + ' 不在 sudoers 文件中。此事将被记录。', 'c-err');
+    }
+  };
+  COMMANDS.hack = function () {
+    var steps = ['绕过防火墙 …', '注入 daemon …', '提权中 …', '访问主网 …', '破解完成。你以为呢?这是静态站。'];
+    var i = 0;
+    (function tick() {
+      if (i < steps.length) {
+        print('<span class="c-ok">[' + (i + 1) + '/' + steps.length + ']</span> ' + steps[i], i === steps.length - 1 ? 'c-egg' : '');
+        i++; setTimeout(tick, 500);
+      }
+    })();
+  };
+  COMMANDS.coffee = function () { print('☕ 正在冲泡 … CPU 已切换至咖啡因驱动。', 'c-egg'); };
+  COMMANDS['42'] = function () { print('生命、宇宙以及一切的终极答案。但问题是什么?', 'c-egg'); };
+  COMMANDS.glitch = function () {
+    document.body.classList.add('glitch-fx');
+    print('// 现实出现故障 …', 'c-egg');
+    setTimeout(function () { document.body.classList.remove('glitch-fx'); }, 1500);
+  };
+  COMMANDS.konami = function () {
+    print('↑ ↑ ↓ ↓ ← → ← → B A — 作弊码已激活(并没有)。', 'c-egg');
+  };
+  COMMANDS.echo = function (args) { print(esc((args || []).join(' '))); };
+
+  // 小游戏:猜数字 1-100
+  var game = null;
+  COMMANDS.game = function () {
+    game = { target: Math.floor(Math.random() * 100) + 1, tries: 0 };
+    print('🎮 <span class="c-ok">猜数字</span>:我想了一个 1-100 的整数。直接输入数字来猜,输入 <span class="c-cmd">quit</span> 退出。', 'c-egg');
+  };
+  COMMANDS.guess = COMMANDS.game;
+  function handleGame(line) {
+    if (line.toLowerCase() === 'quit' || line.toLowerCase() === 'q') {
+      print('已退出游戏。答案是 ' + game.target + '。', 'c-ok'); game = null; return;
+    }
+    var n = parseInt(line, 10);
+    if (isNaN(n)) { print('请输入数字,或 quit 退出。', 'c-err'); return; }
+    game.tries++;
+    if (n === game.target) {
+      print('🎉 猜中了!答案就是 ' + game.target + ',你用了 ' + game.tries + ' 次。', 'c-egg');
+      game = null;
+    } else if (n < game.target) {
+      print('再大一点 ↑(第 ' + game.tries + ' 次)');
+    } else {
+      print('再小一点 ↓(第 ' + game.tries + ' 次)');
+    }
+  }
+
 
   /* ---------- 命令分发 ---------- */
   function run(raw) {
@@ -200,6 +255,7 @@
     echoCmd(line);
     cmdHistory.push(line);
     histPos = cmdHistory.length;
+    if (game) { handleGame(line); save(); return; }
     var parts = line.split(/\s+/);
     var name = parts[0].toLowerCase();
     var args = parts.slice(1);

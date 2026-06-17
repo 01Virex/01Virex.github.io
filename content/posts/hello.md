@@ -1,7 +1,8 @@
 ---
 title: "接入主网"
 date: 2026-06-16T21:40:00+08:00
-tags: ["hello", "intro"]
+tags: ["建站", "教程"]
+categories: ["技术"]
 cover: "/img/posts/sample-cover.svg"
 draft: false
 ---

@@ -8,6 +8,12 @@ enableRobotsTXT = true
 [outputs]
   home = ["HTML", "JSON", "RSS"]
 
+# 分类维度:标签(tag)、分类(category)、系列/专栏(series)
+[taxonomies]
+  tag = "tags"
+  category = "categories"
+  series = "series"
+
 [params]
   subtitle = "Wake the fuck up, samurai. // Gaming & Tech"
   description = "一个赛博朋克风格的 Hugo 站点"
@@ -41,21 +47,25 @@ enableRobotsTXT = true
     url = "/moments/"
     weight = 3
   [[menu.main]]
+    name = "分类"
+    url = "/categories/"
+    weight = 4
+  [[menu.main]]
     name = "关于"
     url = "/about/"
-    weight = 4
+    weight = 5
   [[menu.main]]
     name = "归档"
     url = "/archives/"
-    weight = 5
+    weight = 6
   [[menu.main]]
     name = "友链"
     url = "/friends/"
-    weight = 6
+    weight = 7
   [[menu.main]]
     name = "标签"
     url = "/tags/"
-    weight = 7
+    weight = 8
 
 [markup]
   [markup.highlight]
@@ -72,6 +82,9 @@ enableRobotsTXT = true
   [[related.indices]]
     name = "tags"
     weight = 100
+  [[related.indices]]
+    name = "categories"
+    weight = 60
   [[related.indices]]
     name = "title"
     weight = 20

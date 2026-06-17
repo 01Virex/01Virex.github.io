@@ -1,0 +1,16 @@
+{{ define "main" }}
+<section class="error-404">
+  <h1 class="err-code glitch" data-text="404">404</h1>
+  <p class="err-msg" data-typewriter="// SIGNAL_LOST :: 连接已断开">// SIGNAL_LOST :: 连接已断开</p>
+  <div class="err-panel" aria-hidden="true">
+    <div class="boot-line"><span class="err">[FAIL]</span> 目标节点未响应 …</div>
+    <div class="boot-line"><span class="err">[FAIL]</span> 你访问的页面不在这个数据矩阵里。</div>
+    <div class="boot-line"><span class="ok">[ OK ]</span> 正在重定向选项<span class="blink">_</span></div>
+  </div>
+  <div class="err-actions">
+    <a class="err-btn" href="{{ "/" | relURL }}">&lt;&lt; 返回主网</a>
+    <a class="err-btn" href="{{ "/posts/" | relURL }}">浏览文章 &gt;&gt;</a>
+  </div>
+  <p class="err-hint">提示:按 <span class="kbd">`</span> 打开终端,用 <span class="kbd">ls</span> / <span class="kbd">search</span> 找内容。</p>
+</section>
+{{ end }}
