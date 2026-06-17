@@ -1,0 +1,52 @@
+{{ define "main" }}
+<section class="moments-page">
+  <header class="moments-header">
+    <h1 class="glitch" data-text="{{ .Title }}">{{ .Title }}</h1>
+    {{ with .Content }}<div class="content prose moments-intro">{{ . }}</div>{{ end }}
+  </header>
+
+  <div class="timeline">
+    {{ $moments := sort .Params.moments "date" "desc" }}
+    {{ range $moments }}
+      <article class="moment">
+        <div class="moment-node" aria-hidden="true"></div>
+        <div class="moment-card">
+          <div class="moment-top">
+            <span class="moment-avatar" aria-hidden="true">01</span>
+            <span class="moment-author">{{ $.Site.Title }}</span>
+            {{ $t := time.AsTime .date }}
+            <time class="moment-time" datetime="{{ $t.Format "2006-01-02T15:04:05Z07:00" }}"
+                  data-time="{{ $t.Format "2006-01-02T15:04:05Z07:00" }}">
+              {{ $t.Format "2006.01.02 // 15:04" }}
+            </time>
+            {{ with .mood }}<span class="moment-mood">{{ . }}</span>{{ end }}
+          </div>
+
+          {{ with .text }}<div class="moment-text">{{ . | $.Page.RenderString }}</div>{{ end }}
+
+          {{ with .images }}
+          <div class="moment-images count-{{ len . }}">
+            {{ range . }}
+              <a class="moment-img" href="{{ . }}" data-lightbox>
+                <img src="{{ . }}" alt="动态配图" loading="lazy">
+              </a>
+            {{ end }}
+          </div>
+          {{ end }}
+
+          {{ if or .location .tags }}
+          <div class="moment-meta">
+            {{ with .location }}<span class="moment-loc">⚲ {{ . }}</span>{{ end }}
+            {{ with .tags }}
+              <span class="moment-tags">
+                {{ range . }}<span class="moment-tag">#{{ . }}</span>{{ end }}
+              </span>
+            {{ end }}
+          </div>
+          {{ end }}
+        </div>
+      </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}

@@ -2,6 +2,7 @@
 title: "接入主网"
 date: 2026-06-16T21:40:00+08:00
 tags: ["hello", "intro"]
+cover: "/img/posts/sample-cover.svg"
 draft: false
 ---
 
@@ -20,3 +21,7 @@ def breach(target: str) -> bool:
 > 城市会吞噬你,但你也可以吞噬它。
 
 行内代码示例:`netrunner --jack-in`,链接示例 [Hugo 文档](https://gohugo.io/)。
+
+## 配图示例
+
+![夜之城的霓虹传输信号](/img/posts/sample-cover.svg)

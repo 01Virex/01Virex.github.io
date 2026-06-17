@@ -11,6 +11,13 @@
       {{ end }}
     </div>
   </header>
+  {{ with .Params.cover }}
+  <div class="single-cover">
+    <a href="{{ . | relURL }}" data-lightbox>
+      <img src="{{ . | relURL }}" alt="{{ $.Title }}" loading="eager" decoding="async">
+    </a>
+  </div>
+  {{ end }}
   <div class="content prose">
     {{ .Content }}
   </div>

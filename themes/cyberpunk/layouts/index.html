@@ -30,8 +30,9 @@
   {{ $pages := where .Site.RegularPages "Type" "posts" }}
   {{ if not $pages }}{{ $pages = .Site.RegularPages }}{{ end }}
   {{ range first 6 $pages }}
-    <article class="post-card">
+    <article class="post-card{{ if .Params.cover }} has-cover{{ end }}">
       <a href="{{ .RelPermalink }}" class="post-card-link">
+        {{ with .Params.cover }}<span class="post-card-thumb"><img src="{{ . | relURL }}" alt="{{ $.Title }}" loading="lazy" decoding="async"></span>{{ end }}
         <span class="post-date">{{ .Date.Format "2006.01.02" }}</span>
         <h3 class="post-card-title">{{ .Title }}</h3>
         <p class="post-card-summary">{{ .Summary | plainify | truncate 160 }}</p>

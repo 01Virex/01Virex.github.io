@@ -156,6 +156,36 @@
     });
   }
 
+  /* ---------- 图片放大 lightbox(全站通用) ---------- */
+  function initLightbox() {
+    var box = document.getElementById('lightbox');
+    if (!box) return;
+    var img = document.getElementById('lightbox-img');
+    var closeBtn = box.querySelector('.lightbox-close');
+    function open(src, alt) {
+      img.src = src; img.alt = alt || '';
+      box.hidden = false;
+      document.body.style.overflow = 'hidden';
+    }
+    function close() {
+      box.hidden = true; img.src = '';
+      document.body.style.overflow = '';
+    }
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest('[data-lightbox]');
+      if (!a) return;
+      e.preventDefault();
+      var src = a.getAttribute('href') || (a.querySelector('img') && a.querySelector('img').src);
+      var im = a.querySelector('img');
+      open(src, im ? im.alt : '');
+    });
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    box.addEventListener('click', function (e) { if (e.target === box) close(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !box.hidden) close();
+    });
+  }
+
   /* ---------- 启动 ---------- */
   function init() {
     initProgress();
@@ -163,6 +193,7 @@
     initTypewriter();
     initToc();
     initSiteSearch();
+    initLightbox();
   }
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

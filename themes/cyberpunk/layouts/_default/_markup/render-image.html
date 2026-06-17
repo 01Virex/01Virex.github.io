@@ -1,0 +1,10 @@
+{{- /* 文章正文插图:figure + 说明 + 懒加载 + 点击放大 */ -}}
+{{- $alt := .PlainText | default "" -}}
+<figure class="post-figure">
+  <a href="{{ .Destination | safeURL }}" data-lightbox class="post-figure-link">
+    <img src="{{ .Destination | safeURL }}" alt="{{ $alt }}"
+         loading="lazy" decoding="async"
+         {{ with .Title }}title="{{ . }}"{{ end }}>
+  </a>
+  {{- with $alt }}<figcaption>{{ . }}</figcaption>{{ end -}}
+</figure>

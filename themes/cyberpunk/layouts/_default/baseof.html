@@ -40,6 +40,11 @@
   {{ partial "search.html" . }}
   {{ partial "console.html" . }}
 
+  <div id="lightbox" class="lightbox" hidden>
+    <button type="button" class="lightbox-close" aria-label="关闭">[ X ]</button>
+    <img id="lightbox-img" src="" alt="">
+  </div>
+
   {{ $app := resources.Get "js/app.js" | resources.Minify | resources.Fingerprint }}
   <script src="{{ $app.RelPermalink }}" integrity="{{ $app.Data.Integrity }}" defer></script>
   {{ $console := resources.Get "js/console.js" | resources.Minify | resources.Fingerprint }}
@@ -47,6 +52,10 @@
   {{ if and $dr $dr.enable }}
     {{ $rain := resources.Get "js/datarain.js" | resources.Minify | resources.Fingerprint }}
     <script src="{{ $rain.RelPermalink }}" integrity="{{ $rain.Data.Integrity }}" defer></script>
+  {{ end }}
+  {{ if eq .Layout "moments" }}
+    {{ $m := resources.Get "js/moments.js" | resources.Minify | resources.Fingerprint }}
+    <script src="{{ $m.RelPermalink }}" integrity="{{ $m.Data.Integrity }}" defer></script>
   {{ end }}
 </body>
 </html>
