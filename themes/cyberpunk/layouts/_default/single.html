@@ -45,6 +45,8 @@
   </section>
   {{ end }}
   {{ partial "series.html" . }}
+  {{ partial "comments.html" . }}
+  {{ partial "timeline.html" (dict "limit" 6 "exclude" .RelPermalink) }}
 </article>
 
   {{ if gt (len .TableOfContents) 80 }}

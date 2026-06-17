@@ -8,6 +8,10 @@
 
   {{ partial "seo.html" . }}
 
+  <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+  <link rel="alternate icon" href="{{ "favicon.svg" | relURL }}">
+  <link rel="mask-icon" href="{{ "favicon.svg" | relURL }}" color="#00F0FF">
+
   {{ $css := resources.Get "css/main.css" | resources.Minify | resources.Fingerprint }}
   <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
 

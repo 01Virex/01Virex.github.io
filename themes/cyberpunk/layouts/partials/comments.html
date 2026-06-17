@@ -1,0 +1,27 @@
+{{- /* Giscus 评论:仅在配置启用且为文章页时渲染。
+       需在 hugo.toml 的 [params.giscus] 填好 repo/repoId/category/categoryId */ -}}
+{{- $g := .Site.Params.giscus -}}
+{{- if and $g $g.enable .IsPage (ne .Params.comments false) -}}
+<section class="comments-box">
+  <h2 class="section-title">// COMMENTS</h2>
+  <div class="giscus-wrap">
+    <script src="https://giscus.app/client.js"
+            data-repo="{{ $g.repo }}"
+            data-repo-id="{{ $g.repoId }}"
+            data-category="{{ $g.category }}"
+            data-category-id="{{ $g.categoryId }}"
+            data-mapping="{{ $g.mapping | default "pathname" }}"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="{{ $g.theme | default "dark_dimmed" }}"
+            data-lang="{{ $g.lang | default "zh-CN" }}"
+            data-loading="lazy"
+            crossorigin="anonymous"
+            async>
+    </script>
+    <noscript>需要启用 JavaScript 才能查看评论(由 giscus 提供)。</noscript>
+  </div>
+</section>
+{{- end -}}

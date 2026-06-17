@@ -1,0 +1,10 @@
+{{- /* 代码块渲染钩子:加语言标签 + 行号,复制按钮由 app.js 注入 */ -}}
+{{- $lang := .Type | default "text" -}}
+{{- $opts := dict "lineNos" true "lineNosInTable" true "tabWidth" 2 -}}
+<div class="code-block" data-lang="{{ $lang }}">
+  <div class="code-bar">
+    <span class="code-lang">{{ $lang }}</span>
+    <span class="code-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+  </div>
+  {{ highlight (trim .Inner "\n") $lang (dict "lineNos" true "lineNosInTable" true "tabWidth" 2) }}
+</div>

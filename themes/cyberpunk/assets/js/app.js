@@ -19,16 +19,19 @@
 
   /* ---------- 2. 代码块一键复制 ---------- */
   function initCopy() {
-    var blocks = document.querySelectorAll('.prose pre');
-    blocks.forEach(function (pre) {
-      if (pre.querySelector('.copy-btn')) return;
+    // 新结构:.code-block(带语言标签栏);旧结构:裸 .prose pre
+    var blocks = document.querySelectorAll('.prose .code-block, .prose > pre');
+    blocks.forEach(function (block) {
+      if (block.querySelector('.copy-btn')) return;
       var btn = document.createElement('button');
       btn.className = 'copy-btn';
       btn.type = 'button';
       btn.textContent = 'COPY';
       btn.addEventListener('click', function () {
-        var code = pre.querySelector('code') || pre;
-        var text = code.innerText;
+        // 行号在表格里时,正文在最后一个单元格;否则取整块 code
+        var codeCell = block.querySelector('.lntd:last-child code') ||
+                       block.querySelector('code') || block;
+        var text = codeCell.innerText;
         navigator.clipboard.writeText(text).then(function () {
           btn.textContent = 'COPIED!';
           btn.classList.add('copied');
@@ -38,7 +41,9 @@
           }, 1500);
         });
       });
-      pre.appendChild(btn);
+      // 有标签栏放进栏内,否则贴在 pre 上
+      var bar = block.querySelector('.code-bar');
+      (bar || block).appendChild(btn);
     });
   }
 

@@ -47,6 +47,7 @@
     out.appendChild(div);
     out.scrollTop = out.scrollHeight;
     save();
+    return div;
   }
   function echoCmd(cmd) {
     print('<span class="console-ps1">root@01virex:~#</span> ' + esc(cmd), 'echo');
@@ -79,6 +80,8 @@
         '  <span class="c-cmd">theme</span> color &lt;#色&gt;  改数据雨颜色',
         '  <span class="c-cmd">reboot</span>            重启终端(清屏+重显启动文案)',
         '  <span class="c-cmd">game</span>              玩个小游戏 🎮',
+        '  <span class="c-cmd">fortune</span>           随机赛博格言',
+        '  <span class="c-cmd">hack</span> &lt;文章名&gt;     解密并打开匹配的文章',
         '  <span class="c-cmd">clear</span>             清屏',
         '  <span class="c-muted">// 据说还藏着一些没列出来的命令…</span>'
       ].join('\n'));
@@ -201,17 +204,71 @@
       print('用户 ' + esc(siteTitle) + ' 不在 sudoers 文件中。此事将被记录。', 'c-err');
     }
   };
-  COMMANDS.hack = function () {
-    var steps = ['绕过防火墙 …', '注入 daemon …', '提权中 …', '访问主网 …', '破解完成。你以为呢?这是静态站。'];
-    var i = 0;
-    (function tick() {
-      if (i < steps.length) {
-        print('<span class="c-ok">[' + (i + 1) + '/' + steps.length + ']</span> ' + steps[i], i === steps.length - 1 ? 'c-egg' : '');
-        i++; setTimeout(tick, 500);
-      }
-    })();
+  COMMANDS.hack = function (args) {
+    var kw = (args || []).join(' ').trim();
+    // 无参数:原来的恶搞动画
+    if (!kw) {
+      var steps = ['绕过防火墙 …', '注入 daemon …', '提权中 …', '访问主网 …', '破解完成。你以为呢?这是静态站。'];
+      var i = 0;
+      (function tick() {
+        if (i < steps.length) {
+          print('<span class="c-ok">[' + (i + 1) + '/' + steps.length + ']</span> ' + steps[i], i === steps.length - 1 ? 'c-egg' : '');
+          i++; setTimeout(tick, 500);
+        }
+      })();
+      return;
+    }
+    // 带参数:解密指定文章后跳转
+    loadIndex(function () {
+      var low = kw.toLowerCase();
+      var hit = posts.find(function (p) { return p.title.toLowerCase().indexOf(low) !== -1; });
+      if (!hit) { print('// 目标不存在: "' + esc(kw) + '" — 试试 ls 看有哪些目标', 'c-err'); return; }
+      var glyphs = '!<>-_\\/[]{}—=+*^?#01ｱｲｳｴｵ日月火';
+      var title = hit.title, frames = 12, f = 0;
+      var line = print('<span class="c-ok">[*]</span> 解密目标: <span class="c-egg" id="hack-scramble"></span>', '');
+      var span = line && line.querySelector ? line.querySelector('#hack-scramble') : null;
+      var steps = ['定位数据节点 …', '暴力破解加密层 …', '重组明文 …'];
+      var s = 0;
+      var iv = setInterval(function () {
+        if (span) {
+          var out = '';
+          for (var k = 0; k < title.length; k++) {
+            out += (k < Math.floor(f / frames * title.length)) ? title[k]
+                 : glyphs[Math.floor((f * 7 + k * 13) % glyphs.length)];
+          }
+          span.textContent = out;
+        }
+        if (f % 4 === 0 && s < steps.length) { print('<span class="c-ok">[' + (s + 1) + '/3]</span> ' + steps[s]); s++; }
+        f++;
+        if (f > frames) {
+          clearInterval(iv);
+          if (span) span.textContent = title;
+          print('<span class="c-ok">破解成功!</span> 正在打开 …', 'c-egg');
+          setTimeout(function () { location.href = hit.url; }, 700);
+        }
+      }, 90);
+    });
   };
-  COMMANDS.coffee = function () { print('☕ 正在冲泡 … CPU 已切换至咖啡因驱动。', 'c-egg'); };
+  COMMANDS.fortune = function () {
+    var quotes = [
+      '城市会吞噬你,也会重塑你。',
+      'Wake the fuck up, samurai. We have a city to burn.',
+      '没有义体改造的人,只是还没找到合适的零件。',
+      '在夜之城,记忆是最贵的奢侈品。',
+      '代码即法律,但总有人逍遥法外。',
+      '你不是你的躯体,你是你上传的那部分。',
+      '霓虹之下,人人都在出售一点点自己。',
+      '活着,就是不断给灵魂续费。',
+      '当机器开始做梦,人类就该警惕了。',
+      '数据不会说谎,但写数据的人会。',
+      '所谓自由,不过是更贵的牢笼。',
+      '别相信任何不留源码的人。'
+    ];
+    var q = quotes[Math.floor(Math.random() * quotes.length)];
+    print('<span class="c-egg">「 ' + esc(q) + ' 」</span>');
+  };
+  COMMANDS.coffee = function () { print('CPU 已切换至咖啡因驱动。', 'c-egg'); };
+  COMMANDS.cocacola = function () { print('CPU 已切换至可乐驱动。', 'c-egg'); };
   COMMANDS['42'] = function () { print('生命、宇宙以及一切的终极答案。但问题是什么?', 'c-egg'); };
   COMMANDS.glitch = function () {
     document.body.classList.add('glitch-fx');

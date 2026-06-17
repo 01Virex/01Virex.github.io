@@ -1,0 +1,21 @@
+{{- /* 最近更新时间线:取最新 N 篇文章,紧凑竖向时间线 */ -}}
+{{- $limit := .limit | default 6 -}}
+{{- $exclude := .exclude -}}
+{{- $posts := where site.RegularPages "Type" "posts" -}}
+{{- $list := first $limit $posts -}}
+{{- with $list -}}
+<section class="timeline-box">
+  <h2 class="section-title">// RECENT_UPDATES</h2>
+  <ol class="mini-timeline">
+    {{- range . -}}
+      {{- if and $exclude (eq .RelPermalink $exclude) -}}{{- continue -}}{{- end -}}
+      <li class="mt-item">
+        <span class="mt-dot" aria-hidden="true"></span>
+        <time class="mt-date">{{ .Date.Format "2006.01.02" }}</time>
+        <a class="mt-link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{- with .Params.categories -}}<span class="mt-cat">{{ index . 0 }}</span>{{- end -}}
+      </li>
+    {{- end -}}
+  </ol>
+</section>
+{{- end -}}

@@ -360,8 +360,31 @@ mark.hl { background: var(--cp-yellow); color: #000; padding: 0 2px; border-radi
   opacity: 0; transition: opacity .2s, color .2s, border-color .2s;
 }
 .prose pre:hover .copy-btn { opacity: 1; }
+.code-block:hover .copy-btn { opacity: 1; }
 .copy-btn:hover { color: var(--cp-yellow); border-color: var(--cp-yellow); }
 .copy-btn.copied { color: #000; background: var(--cp-yellow); border-color: var(--cp-yellow); }
+
+/* 代码块容器:语言标签栏 + 行号 */
+.code-block { position: relative; margin: 1.5rem 0; border: 1px solid rgba(252,238,10,0.25); background: #000; }
+.code-bar {
+  display: flex; align-items: center; gap: 0.6rem;
+  padding: 0.4rem 0.8rem; background: rgba(252,238,10,0.07);
+  border-bottom: 1px solid rgba(252,238,10,0.18);
+}
+.code-lang { color: var(--cp-yellow); font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; }
+.code-dots { display: inline-flex; gap: 5px; margin-left: auto; margin-right: 0.2rem; }
+.code-dots i { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,0.18); }
+.code-dots i:first-child { background: var(--cp-magenta); }
+.code-dots i:nth-child(2) { background: var(--cp-yellow); }
+.code-dots i:last-child { background: var(--cp-cyan); }
+.code-block .copy-btn { top: 5px; }
+/* 容器内的 pre 去掉外层边框,避免双框 */
+.code-block pre { border: 0 !important; border-left: 0 !important; margin: 0; }
+.code-block .highlight { margin: 0; }
+/* 行号列样式 */
+.prose .chroma .lntd { padding: 0; vertical-align: top; }
+.prose .chroma .lnt { color: rgba(255,255,255,0.28); user-select: none; padding-right: 0.9rem; }
+.prose .chroma .lntable { display: block; overflow-x: auto; }
 
 /* ---- 打字机效果 ---- */
 .hero-sub.typing::after { content: "_"; color: var(--cp-cyan); animation: blink 1s steps(2) infinite; }
@@ -605,6 +628,25 @@ mark.hl { background: var(--cp-yellow); color: #000; padding: 0 2px; border-radi
 .home-moment { display: flex; align-items: baseline; gap: 0.9rem; padding: 0.6rem 0.9rem; border-left: 2px solid var(--cp-magenta); background: rgba(13,15,20,0.45); }
 .home-moment-time { color: var(--cp-muted); font-family: var(--font-mono); font-size: 0.78rem; flex: 0 0 auto; }
 .home-moment-text { color: var(--cp-text); margin: 0; line-height: 1.5; }
+
+/* 最近更新时间线(文章页) */
+.timeline-box { margin-top: 3rem; }
+.mini-timeline { list-style: none; margin: 1rem 0 0; padding: 0; position: relative; }
+.mini-timeline::before { content: ""; position: absolute; left: 4px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--cp-cyan), var(--cp-magenta)); opacity: 0.5; }
+.mt-item { display: flex; align-items: baseline; gap: 0.8rem; padding: 0.45rem 0 0.45rem 1.4rem; position: relative; }
+.mt-dot { position: absolute; left: 0; top: 0.7rem; width: 10px; height: 10px; border-radius: 50%; background: var(--cp-cyan); box-shadow: 0 0 8px var(--cp-cyan); }
+.mt-date { color: var(--cp-muted); font-family: var(--font-mono); font-size: 0.78rem; flex: 0 0 auto; }
+.mt-link { color: var(--cp-text); flex: 1 1 auto; }
+.mt-link:hover { color: var(--cp-cyan); }
+.mt-cat { color: var(--cp-magenta); font-family: var(--font-mono); font-size: 0.72rem; flex: 0 0 auto; }
+
+/* 评论区 */
+.comments-box { margin-top: 3rem; }
+.giscus-wrap { margin-top: 1rem; }
+
+/* 标签热度云:字号已按文章数内联,这里加悬浮反馈 */
+.cloud-weighted .term-chip { align-items: baseline; transition: color .2s, border-color .2s, transform .2s, box-shadow .2s; }
+.cloud-weighted .term-chip:hover { transform: translateY(-2px) scale(1.05); }
 
 /* glitch 命令特效 */
 .glitch-fx { animation: glitchShake 0.18s steps(2) infinite; }

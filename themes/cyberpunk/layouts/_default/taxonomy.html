@@ -25,11 +25,17 @@
 <section class="list-page taxonomy-page">
   <h1 class="section-title">// {{ .Title | upper }}</h1>
   {{ with .Content }}<div class="content prose">{{ . }}</div>{{ end }}
-  <div class="term-cloud">
+  {{- /* 计算最大文章数,据此把字号映射到 0.85~1.9rem,形成"热度大小" */ -}}
+  {{- $max := 1 -}}
+  {{- range .Pages -}}{{- if gt (len .Pages) $max -}}{{- $max = len .Pages -}}{{- end -}}{{- end -}}
+  <div class="term-cloud cloud-weighted">
     {{ range .Pages.ByTitle }}
-      <a class="term-chip" href="{{ .RelPermalink }}">
+      {{- $n := len .Pages -}}
+      {{- $size := add 0.85 (mul (div (float $n) (float $max)) 1.05) -}}
+      <a class="term-chip" href="{{ .RelPermalink }}" style="font-size:{{ printf "%.2f" $size }}rem"
+         title="{{ $n }} 篇">
         <span class="term-name">{{ .Title }}</span>
-        <span class="term-count">{{ len .Pages }}</span>
+        <span class="term-count">{{ $n }}</span>
       </a>
     {{ end }}
   </div>

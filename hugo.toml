@@ -24,6 +24,19 @@ enableRobotsTXT = true
   # 可选:社交账号,用于 JSON-LD sameAs(填了才输出)
   # twitter = "@yourhandle"
 
+  # Giscus 评论(基于 GitHub Discussions,免费无后端)
+  # 启用步骤见 速查表.md「评论功能」一章:
+  #   1. 仓库开启 Discussions  2. 安装 giscus app  3. 去 giscus.app 生成下面四个 ID
+  [params.giscus]
+    enable     = true          # 填好下面四项后改成 true 即开启
+    repo       = "01Virex/01Virex.github.io"
+    repoId     = "R_kgDOS8fi9A"             # 从 giscus.app 复制
+    category   = "Announcements"
+    categoryId = "DIC_kwDOS8fi9M4C_Vm3"             # 从 giscus.app 复制
+    mapping    = "pathname"
+    theme      = "dark_dimmed"
+    lang       = "zh-CN"
+
   # 背景数据雨(Matrix 字符雨)—— 可自定义
   [params.dataRain]
     enable   = true          # 开关:false 关闭
