@@ -60,6 +60,22 @@
     }).catch(function () { loaded = true; cb && cb(); });
   }
 
+  // 标题最佳匹配:精确 > 前缀 > 包含;同一档内取标题最短的(最贴近关键词)
+  function bestMatch(kw) {
+    kw = kw.toLowerCase().trim();
+    if (!kw) return null;
+    var exact = [], prefix = [], contains = [];
+    posts.forEach(function (p) {
+      var t = p.title.toLowerCase();
+      if (t === kw) exact.push(p);
+      else if (t.indexOf(kw) === 0) prefix.push(p);
+      else if (t.indexOf(kw) !== -1) contains.push(p);
+    });
+    var pool = exact.length ? exact : (prefix.length ? prefix : contains);
+    if (!pool.length) return null;
+    return pool.sort(function (a, b) { return a.title.length - b.title.length; })[0];
+  }
+
   /* ---------- 命令实现 ---------- */
   var COMMANDS = {
     help: function () {
@@ -100,7 +116,7 @@
       var kw = args.join(' ').toLowerCase();
       if (!kw) { print('用法: open &lt;关键词&gt;', 'c-err'); return; }
       loadIndex(function () {
-        var hit = posts.find(function (p) { return p.title.toLowerCase().indexOf(kw) !== -1; });
+        var hit = bestMatch(kw);
         if (hit) { print('正在打开: ' + esc(hit.title) + ' …', 'c-ok'); location.href = hit.url; }
         else print('未找到标题包含 "' + esc(kw) + '" 的文章', 'c-err');
       });
@@ -220,8 +236,7 @@
     }
     // 带参数:解密指定文章后跳转
     loadIndex(function () {
-      var low = kw.toLowerCase();
-      var hit = posts.find(function (p) { return p.title.toLowerCase().indexOf(low) !== -1; });
+      var hit = bestMatch(kw);
       if (!hit) { print('// 目标不存在: "' + esc(kw) + '" — 试试 ls 看有哪些目标', 'c-err'); return; }
       var glyphs = '!<>-_\\/[]{}—=+*^?#01ｱｲｳｴｵ日月火';
       var title = hit.title, frames = 12, f = 0;

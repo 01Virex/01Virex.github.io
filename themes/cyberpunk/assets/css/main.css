@@ -377,14 +377,18 @@ mark.hl { background: var(--cp-yellow); color: #000; padding: 0 2px; border-radi
 .code-dots i:first-child { background: var(--cp-magenta); }
 .code-dots i:nth-child(2) { background: var(--cp-yellow); }
 .code-dots i:last-child { background: var(--cp-cyan); }
-.code-block .copy-btn { top: 5px; }
-/* 容器内的 pre 去掉外层边框,避免双框 */
-.code-block pre { border: 0 !important; border-left: 0 !important; margin: 0; }
-.code-block .highlight { margin: 0; }
-/* 行号列样式 */
-.prose .chroma .lntd { padding: 0; vertical-align: top; }
-.prose .chroma .lnt { color: rgba(255,255,255,0.28); user-select: none; padding-right: 0.9rem; }
-.prose .chroma .lntable { display: block; overflow-x: auto; }
+
+/* COPY 按钮:在标签栏内正常流式排布(不再绝对定位,避免压住圆点) */
+.code-block .copy-btn { position: static; top: auto; right: auto; margin-left: 0.6rem; flex: 0 0 auto; }
+.code-block .code-dots { margin-left: auto; margin-right: 0; }
+
+/* 容器内 pre:去边框 + 背景透明,让容器统一的 #000 透出,消除错位灰块 */
+.code-block pre { border: 0 !important; border-left: 0 !important; margin: 0; background: transparent !important; }
+.code-block .highlight { margin: 0; background: transparent; overflow-x: auto; }
+.code-block .highlight table { background: transparent; width: 100%; }
+.code-block .highlight td { background: transparent; }
+/* 行号列(noClasses 模式下是表格第一个单元格):淡色、不可选中 */
+.code-block .highlight td:first-child pre { color: rgba(255,255,255,0.28); user-select: none; padding-right: 0; }
 
 /* ---- 打字机效果 ---- */
 .hero-sub.typing::after { content: "_"; color: var(--cp-cyan); animation: blink 1s steps(2) infinite; }
